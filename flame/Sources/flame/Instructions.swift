@@ -20,23 +20,20 @@ struct Imm : Operand {
     init(value: Int) throws {
         if(value > 4095 || value < -4096) {
             throw ImmError.outOfRange
+        } else {
+            self.value = value
         }
     }
 }
 
-protocol Offset<T: Operand> {
+struct Offset {
     var base: Reg { get }
-    var offset: T { get }
-}
+    var offset: Operand { get }
 
-struct RegOffset : Offset<Reg> {
-    var base: Reg
-    var offset: Reg
-}
-
-struct ImmOffset : Offset<Imm> {
-    var base: Reg
-    var offset: Imm
+    init(base: Reg, offset: Operand) {
+        self.base = base
+        self.offset = offset
+    }
 }
 
 protocol Instr {
