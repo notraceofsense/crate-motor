@@ -10,7 +10,7 @@ protocol Operand : AsmObject {}
 
 protocol Address : AsmObject {}
 
-class Constant : AsmObject {
+protocol Constant : AsmObject {
     static var bitLength: Int
     static var signed: Bool
     static var upperBound: Int
@@ -31,7 +31,7 @@ class NormConstant : Constant {
 
      init(value: Int) throws {
         if(value > upperBound || value < lowerBound) {
-            throw ConstError.outOfRange
+            throw Constant.ConstError.outOfRange
         } else {
             self.value = value
         }
@@ -52,7 +52,7 @@ class ArithConst : Operand, Constant {
 
      init(value: Int) throws {
         if(value > upperBound || value < lowerBound) {
-            throw ConstError.outOfRange
+            throw Constant.ConstError.outOfRange
         } else {
             self.value = value
         }
@@ -72,7 +72,7 @@ class SethiConst : Constant {
 
     init(value: Int) throws {
         if(value > upperBound || value < lowerBound) {
-            throw ConstError.outOfRange
+            throw Constant.ConstError.outOfRange
         } else {
             self.value = value
         }
@@ -339,8 +339,8 @@ enum Reg : Operand {
 }
 
 struct Offset : AsmObject {
-    var base: Reg { get }
-    var offset: ArithOperand { get }
+    var base: Reg
+    var offset: Operand
 
     init(base: Reg, offset: Operand = ArithConst(0)) {
         self.base = base
@@ -373,7 +373,7 @@ struct BranchAddress : Address, Constant {
 
     init(value: Int) throws {
         if(value > upperBound || value < lowerBound) {
-            throw ConstError.outOfRange
+            throw Constant.ConstError.outOfRange
         } else {
             self.value = value
         }
@@ -393,7 +393,7 @@ struct JumpAddress : Address, Constant {
 
     init(value: Int) throws {
         if(value > upperBound || value < lowerBound) {
-            throw ConstError.outOfRange
+            throw Constant.ConstError.outOfRange
         } else {
             self.value = value
         }
@@ -407,7 +407,7 @@ struct JumpAddress : Address, Constant {
 protocol Instr : AsmObject {}
 
 struct LabelInstr : Instr {
-    var label : Label { get }
+    var label : Label
     init(label: Label) {
         self.label = label
     }
