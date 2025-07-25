@@ -435,6 +435,43 @@ enum ArithInstr : Instr {
     case orncc(Reg, Operand, Reg)
     case xorcc(Reg, Operand, Reg)
     case xnorcc(Reg, Operand, Reg)
+
+    func toAsm() -> String {
+        switch self {
+            case let .add(a, b, dest):
+                return "add\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .sub(a, b, dest):
+                return "sub\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .and(a, b, dest):
+                return "and\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .andn(a, b, dest):
+                return "andn\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .or(a, b, dest):
+                return "or\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .orn(a, b, dest):
+                return "orn\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .xor(a, b, dest):
+                return "xor\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .xnor(a, b, dest):
+                return "xnor\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .addcc(a, b, dest):
+                return "addcc\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .subcc(a, b, dest):
+                return "subcc\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .andcc(a, b, dest):
+                return "andcc\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .andncc(a, b, dest):
+                return "andncc\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .orcc(a, b, dest):
+                return "orcc\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .orncc(a, b, dest):
+                return "orncc\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .xorcc(a, b, dest):
+                return "xorcc\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+            case let .xnorcc(a, b, dest):
+                return "xnorcc\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+        }
+    }
 }
 
 enum LoadStoreInstr : Instr {
