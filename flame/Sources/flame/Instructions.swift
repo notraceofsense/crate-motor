@@ -7,22 +7,98 @@ protocol AsmObject {
 }
 
 protocol Operand : AsmObject {}
+protocol ArithOperand : Operand {}
 
-enum Unary : AsmObject {
-    case hi(Operand)
-    case lo(Operand)
+protocol Address : AsmObject {}
+
+class Constant : AsmObject {
+    static var bitLength: Int
+    static var signed: Bool
+    static var upperBound: Int
+    static var lowerBound: Int
+    var value: Int
+
+    enum ConstError: Error {
+        case outOfRange
+    }
+}
+
+struct NormConstant : Constant {
+    static var bitLength: Int = 32
+     static var signed: Bool = true
+     static var upperBound: Int = pow(2, bitLength - 1) - 1
+     static var lowerBound: Int = -(pow(2, bitLength - 1))
+     var value: Int
+
+     init(value: Int) throws {
+        if(value > upperBound || value < lowerBound) {
+            throw ConstError.outOfRange
+        } else {
+            self.value = value
+        }
+    }
+
+    func toAsm() -> String {
+        return String(value)
+    }
+}
+
+// TODO: Find a better way to do these that repeats less code
+struct ArithConst : ArithOperand, Constant {
+     static var bitLength: Int = 13
+     static var signed: Bool = true
+     static var upperBound: Int = pow(2, bitLength - 1) - 1
+     static var lowerBound: Int = -(pow(2, bitLength - 1))
+     var value: Int
+
+     init(value: Int) throws {
+        if(value > upperBound || value < lowerBound) {
+            throw ConstError.outOfRange
+        } else {
+            self.value = value
+        }
+    }
+
+    func toAsm() -> String {
+        return String(value)
+    }
+}
+
+struct SethiConst : Constant {
+    static var bitLength: Int = 22
+    static var signed: Bool = false
+    static var upperBound: Int = pow(2, bitLength) - 1
+    static var lowerBound: Int = 0
+    var value: Int
+
+    init(value: Int) throws {
+        if(value > upperBound || value < lowerBound) {
+            throw ConstError.outOfRange
+        } else {
+            self.value = value
+        }
+    }
+
+    func toAsm() -> String {
+        return String(value)
+    }
+}
+
+struct UnaryHi : SethiConst {
+    case hi(NormConstant)
+    case lo(NormConstant)
 
     func toAsm() -> String {
         switch self {
             case let .hi(operand):
-                return "%hi(\(operand))"
+                return "%hi(\(operand.toAsm()))"
             case let .lo(operand):
-                return "%lo(\(operand))"
+                return "%lo(\(operand.toAsm()))"
         }
     }
 }
 
-enum Reg : Operand {
+enum Reg : Operand, ArithOperand {
     // general purpose
     case g0, g1, g2, g3, g4, g5, g6, g7
     case o0, o1, o2, o3, o4, o5, o6, o7
@@ -262,15 +338,42 @@ enum Reg : Operand {
     }
 }
 
-struct Imm : Operand {
-    enum ImmError: Error {
-        case outOfRange
+struct Offset : AsmObject {
+    var base: Reg { get }
+    var offset: ArithOperand { get }
+
+    init(base: Reg, offset: ArithOperand = ArithConst(0)) {
+        self.base = base
+        self.offset = offset
     }
 
+    func toAsm() -> String {
+        return "[\(base.toAsm())+\(offset.toAsm())]"
+    }
+}
+
+struct Label : Address {
+    var value : String { get }
+    init(value: String) {
+        // TODO: Check validity of label
+        self.value = value
+    }
+
+    func toAsm() -> String {
+        return value
+    }
+}
+
+struct BranchAddress : Address, Constant {
+    static var bitLength: Int = 22
+    static var signed: Bool = false
+    static var upperBound: Int = pow(2, bitLength) - 1
+    static var lowerBound: Int = 0
     var value: Int
+
     init(value: Int) throws {
-        if(value > 4095 || value < -4096) {
-            throw ImmError.outOfRange
+        if(value > upperBound || value < lowerBound) {
+            throw ConstError.outOfRange
         } else {
             self.value = value
         }
@@ -281,29 +384,23 @@ struct Imm : Operand {
     }
 }
 
-struct Offset : AsmObject {
-    var base: Reg { get }
-    var offset: Operand { get }
+struct JumpAddress : Address, Constant {
+    static var bitLength: Int = 30
+    static var signed: Bool = false
+    static var upperBound: Int = pow(2, bitLength) - 1
+    static var lowerBound: Int = 0
+    var value: Int
 
-    init(base: Reg, offset: Operand = Imm(0)) {
-        self.base = base
-        self.offset = offset
+    init(value: Int) throws {
+        if(value > upperBound || value < lowerBound) {
+            throw ConstError.outOfRange
+        } else {
+            self.value = value
+        }
     }
 
     func toAsm() -> String {
-        return "[\(base.toAsm())+\(offset.toAsm())]"
-    }
-}
-
-struct Label : AsmObject {
-    var value : String { get }
-    init(value: String) {
-        // TODO: Check validity of label
-        self.value = value
-    }
-
-    func toAsm() -> String {
-        return value
+        return String(value)
     }
 }
 
@@ -321,23 +418,23 @@ struct LabelInstr : Instr {
 }
 
 enum ArithInstr : Instr {
-    case add(Reg, Operand, Reg)
-    case sub(Reg, Operand, Reg)
-    case and(Reg, Operand, Reg)
-    case andn(Reg, Operand, Reg)
-    case or(Reg, Operand, Reg)
-    case orn(Reg, Operand, Reg)
-    case xor(Reg, Operand, Reg)
-    case xnor(Reg, Operand, Reg)
+    case add(Reg, ArithOperand, Reg)
+    case sub(Reg, ArithOperand, Reg)
+    case and(Reg, ArithOperand, Reg)
+    case andn(Reg, ArithOperand, Reg)
+    case or(Reg, ArithOperand, Reg)
+    case orn(Reg, ArithOperand, Reg)
+    case xor(Reg, ArithOperand, Reg)
+    case xnor(Reg, ArithOperand, Reg)
     // Condition code setting opcodes
-    case addcc(Reg, Operand, Reg)
-    case subcc(Reg, Operand, Reg)
-    case andcc(Reg, Operand, Reg)
-    case andncc(Reg, Operand, Reg)
-    case orcc(Reg, Operand, Reg)
-    case orncc(Reg, Operand, Reg)
-    case xorcc(Reg, Operand, Reg)
-    case xnorcc(Reg, Operand, Reg)
+    case addcc(Reg, ArithOperand, Reg)
+    case subcc(Reg, ArithOperand, Reg)
+    case andcc(Reg, ArithOperand, Reg)
+    case andncc(Reg, ArithOperand, Reg)
+    case orcc(Reg, ArithOperand, Reg)
+    case orncc(Reg, ArithOperand, Reg)
+    case xorcc(Reg, ArithOperand, Reg)
+    case xnorcc(Reg, ArithOperand, Reg)
 }
 
 enum LoadStoreInstr : Instr {
@@ -383,6 +480,10 @@ enum JmplInstr : Instr {
     case jmpl(Label, Reg)
 }
 
+enum MiscInstr : Instr {
+    case sethi(SethiConst, Reg)
+}
+
 enum SynthInstr : Instr {
     case cmp(Reg, Operand)
     case jmp(Label)
@@ -396,4 +497,17 @@ enum SynthInstr : Instr {
     case not(Reg, Reg)
     case neg(Reg, Reg)
 }
-        
+
+enum PseudoOps : AsmObject {
+    case align(Int)
+    case ascii(String)
+    case file(String)
+    case global(String)
+    case ident(String)
+    case proc(Int)
+    case section(String)
+    case size(Int)
+    case skip(Int)
+    case type(String)
+    case word(Int)
+}
