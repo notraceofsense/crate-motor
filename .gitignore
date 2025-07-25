@@ -60,3 +60,6 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# How this didn't get into an Apple-specific .gitignore, I have no idea
+.DS_Store
