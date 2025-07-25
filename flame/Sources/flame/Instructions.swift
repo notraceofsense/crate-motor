@@ -36,10 +36,18 @@ struct Offset {
     }
 }
 
-protocol Label {}
+
 
 protocol Instr {
     func toAsm()
+}
+
+struct Label : Instr {
+    var value : String { get }
+    init(value: String) {
+        // TODO: Check validity of label
+        self.value = value
+    }
 }
 
 enum ArithInstr : Instr {
