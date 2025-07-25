@@ -7,7 +7,6 @@ protocol AsmObject {
 }
 
 protocol Operand : AsmObject {}
-protocol ArithOperand : Operand {}
 
 protocol Address : AsmObject {}
 
@@ -23,7 +22,7 @@ class Constant : AsmObject {
     }
 }
 
-struct NormConstant : Constant {
+class NormConstant : Constant {
     static var bitLength: Int = 32
      static var signed: Bool = true
      static var upperBound: Int = pow(2, bitLength - 1) - 1
@@ -44,7 +43,7 @@ struct NormConstant : Constant {
 }
 
 // TODO: Find a better way to do these that repeats less code
-struct ArithConst : ArithOperand, Constant {
+class ArithConst : Operand, Constant {
      static var bitLength: Int = 13
      static var signed: Bool = true
      static var upperBound: Int = pow(2, bitLength - 1) - 1
@@ -64,7 +63,7 @@ struct ArithConst : ArithOperand, Constant {
     }
 }
 
-struct SethiConst : Constant {
+class SethiConst : Constant {
     static var bitLength: Int = 22
     static var signed: Bool = false
     static var upperBound: Int = pow(2, bitLength) - 1
@@ -84,9 +83,10 @@ struct SethiConst : Constant {
     }
 }
 
-struct UnaryHi : SethiConst {
-    case hi(NormConstant)
-    case lo(NormConstant)
+enum Unary : AsmObject {
+    // I hate this so much so root object it is
+    case hi(AsmObject)
+    case lo(AsmObject)
 
     func toAsm() -> String {
         switch self {
@@ -98,7 +98,7 @@ struct UnaryHi : SethiConst {
     }
 }
 
-enum Reg : Operand, ArithOperand {
+enum Reg : Operand {
     // general purpose
     case g0, g1, g2, g3, g4, g5, g6, g7
     case o0, o1, o2, o3, o4, o5, o6, o7
@@ -342,7 +342,7 @@ struct Offset : AsmObject {
     var base: Reg { get }
     var offset: ArithOperand { get }
 
-    init(base: Reg, offset: ArithOperand = ArithConst(0)) {
+    init(base: Reg, offset: Operand = ArithConst(0)) {
         self.base = base
         self.offset = offset
     }
@@ -418,23 +418,23 @@ struct LabelInstr : Instr {
 }
 
 enum ArithInstr : Instr {
-    case add(Reg, ArithOperand, Reg)
-    case sub(Reg, ArithOperand, Reg)
-    case and(Reg, ArithOperand, Reg)
-    case andn(Reg, ArithOperand, Reg)
-    case or(Reg, ArithOperand, Reg)
-    case orn(Reg, ArithOperand, Reg)
-    case xor(Reg, ArithOperand, Reg)
-    case xnor(Reg, ArithOperand, Reg)
+    case add(Reg, Operand, Reg)
+    case sub(Reg, Operand, Reg)
+    case and(Reg, Operand, Reg)
+    case andn(Reg, Operand, Reg)
+    case or(Reg, Operand, Reg)
+    case orn(Reg, Operand, Reg)
+    case xor(Reg, Operand, Reg)
+    case xnor(Reg, Operand, Reg)
     // Condition code setting opcodes
-    case addcc(Reg, ArithOperand, Reg)
-    case subcc(Reg, ArithOperand, Reg)
-    case andcc(Reg, ArithOperand, Reg)
-    case andncc(Reg, ArithOperand, Reg)
-    case orcc(Reg, ArithOperand, Reg)
-    case orncc(Reg, ArithOperand, Reg)
-    case xorcc(Reg, ArithOperand, Reg)
-    case xnorcc(Reg, ArithOperand, Reg)
+    case addcc(Reg, Operand, Reg)
+    case subcc(Reg, Operand, Reg)
+    case andcc(Reg, Operand, Reg)
+    case andncc(Reg, Operand, Reg)
+    case orcc(Reg, Operand, Reg)
+    case orncc(Reg, Operand, Reg)
+    case xorcc(Reg, Operand, Reg)
+    case xnorcc(Reg, Operand, Reg)
 }
 
 enum LoadStoreInstr : Instr {
@@ -451,24 +451,24 @@ enum LoadStoreInstr : Instr {
 }
 
 enum BranchInstr : Instr {
-    case ba(Label)
-    case bn(Label)
-    case bne(Label)
-    case bnz(Label)
-    case be(Label)
-    case bz(Label)
-    case bg(Label)
-    case ble(Label)
-    case bge(Label)
-    case bl(Label)
-    case bgu(Label)
-    case bleu(Label)
-    case bcc(Label)
-    case bcs(Label)
-    case bpos(Label)
-    case bneg(Label)
-    case bvc(Label)
-    case bvs(Label)
+    case ba(Address)
+    case bn(Address)
+    case bne(Address)
+    case bnz(Address)
+    case be(Address)
+    case bz(Address)
+    case bg(Address)
+    case ble(Address)
+    case bge(Address)
+    case bl(Address)
+    case bgu(Address)
+    case bleu(Address)
+    case bcc(Address)
+    case bcs(Address)
+    case bpos(Address)
+    case bneg(Address)
+    case bvc(Address)
+    case bvs(Address)
 }
 
 enum RegWinInstr : Instr {
@@ -477,7 +477,7 @@ enum RegWinInstr : Instr {
 }
 
 enum JmplInstr : Instr {
-    case jmpl(Label, Reg)
+    case jmpl(Address, Reg)
 }
 
 enum MiscInstr : Instr {
@@ -486,8 +486,8 @@ enum MiscInstr : Instr {
 
 enum SynthInstr : Instr {
     case cmp(Reg, Operand)
-    case jmp(Label)
-    case call(Label)
+    case jmp(Address)
+    case call(Address)
     case tst(Reg)
     case ret
     case retl
@@ -496,6 +496,8 @@ enum SynthInstr : Instr {
     case set(Int, Reg)
     case not(Reg, Reg)
     case neg(Reg, Reg)
+    case inc(ArithConst, Reg)
+    case mov(Operand, Reg)
 }
 
 enum PseudoOps : AsmObject {
