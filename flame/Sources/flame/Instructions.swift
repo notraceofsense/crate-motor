@@ -485,6 +485,32 @@ enum LoadStoreInstr : Instr {
     case stb(Reg, Offset)
     case sth(Reg, Offset)
     case std(Reg, Offset)
+
+    func toAsm() -> String {
+        switch self {
+            case let .ld(offset, reg):
+                return "ld\t\(offset.toAsm()), \(reg.toAsm())"
+            case let .ldub(offset, reg):
+                return "ldub\t\(offset.toAsm()), \(reg.toAsm())"
+            case let .ldsb(offset, reg):
+                return "ldsb\t\(offset.toAsm()), \(reg.toAsm())"
+            case let .lduh(offset, reg):
+                return "lduh\t\(offset.toAsm()), \(reg.toAsm())"
+            case let .ldsh(offset, reg):
+                return "ldsh\t\(offset.toAsm()), \(reg.toAsm())"
+            case let .ldd(offset, reg):
+                return "ldd\t\(offset.toAsm()), \(reg.toAsm())"
+            case let .st(reg, offset):
+                return "st\t\(reg.toAsm()), \(offset.toAsm())"
+            case let .stb(reg, offset):
+                return "stb\t\(reg.toAsm()), \(offset.toAsm())"
+            case let .sth(reg, offset):
+                return "sth\t\(reg.toAsm()), \(offset.toAsm())"
+            case let .std(reg, offset):
+                return "std\t\(reg.toAsm()), \(offset.toAsm())"
+        }
+    }
+    
 }
 
 enum BranchInstr : Instr {
@@ -506,19 +532,84 @@ enum BranchInstr : Instr {
     case bneg(Address)
     case bvc(Address)
     case bvs(Address)
+
+    func toAsm() -> String {
+        switch self {
+            case let .ba(addr):
+                return "ba\t\(addr.toAsm())"
+            case let .bn(addr):
+                return "bn\t\(addr.toAsm())"
+            case let .bne(addr):
+                return "bne\t\(addr.toAsm())"
+            case let .bnz(addr):
+                return "bnz\t\(addr.toAsm())"
+            case let .be(addr):
+                return "be\t\(addr.toAsm())"
+            case let .bz(addr):
+                return "bz\t\(addr.toAsm())"
+            case let .bg(addr):
+                return "bg\t\(addr.toAsm())"
+            case let .ble(addr):
+                return "ble\t\(addr.toAsm())"
+            case let .bge(addr):
+                return "bge\t\(addr.toAsm())"
+            case let .bl(addr):
+                return "bl\t\(addr.toAsm())"
+            case let .bgu(addr):
+                return "bgu\t\(addr.toAsm())"
+            case let .bleu(addr):
+                return "bleu\t\(addr.toAsm())"
+            case let .bcc(addr):
+                return "bcc\t\(addr.toAsm())"
+            case let .bcs(addr):
+                return "bcs\t\(addr.toAsm())"
+            case let .bpos(addr):
+                return "bpos\t\(addr.toAsm())"
+            case let .bneg(addr):
+                return "bneg\t\(addr.toAsm())"
+            case let .bvc(addr):
+                return "bvc\t\(addr.toAsm())"
+            case let .bvs(addr):
+                return "bvs\t\(addr.toAsm())"
+        }
+    }
 }
 
 enum RegWinInstr : Instr {
     case restore(Reg, Operand, Reg)
     case save(Reg, Operand, Reg)
+
+    func toAsm() -> String {
+        switch self {
+        case let .restore(a, b, dest):
+            return "restore\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+        case let .save(a, b, dest):
+            return "save\t\(a.toAsm()), \(b.toAsm()), \(dest.toAsm())"
+        }
+    }
+
 }
 
 enum JmplInstr : Instr {
     case jmpl(Address, Reg)
+
+    func toAsm() -> String {
+        switch self {
+        case let .jmpl(addr, reg):
+            return "jmpl\t\(addr.toAsm()), \(reg.toAsm())"
+        }
+    }
 }
 
 enum MiscInstr : Instr {
     case sethi(AsmObject, Reg)
+
+    func toAsm() -> String {
+        switch self {
+        case let .sethi(obj, reg):
+            return "sethi\t\(obj.toAsm()), \(reg.toAsm())"
+        }
+    }
 }
 
 enum SynthInstr : Instr {
@@ -535,6 +626,37 @@ enum SynthInstr : Instr {
     case neg(Reg, Reg)
     case inc(ArithConst, Reg)
     case mov(Operand, Reg)
+
+    func toAsm() -> String {
+        switch self {
+        case let .cmp(a, b):
+            return "cmp\t\(a.toAsm()), \(b.toAsm())"
+        case let .jmp(addr):
+            return "jmp\t\(addr.toAsm())"
+        case let .call(addr):
+            return "call\t\(addr.toAsm())"
+        case let .tst(reg):
+            return "tst\t\(reg.toAsm())"
+        case .ret:
+            return "ret"
+        case .retl:
+            return "retl"
+        case .restore:
+            return "restore"
+        case .save:
+            return "save"
+        case let .set(val, reg):
+            return "set\t\(val), \(reg.toAsm())"
+        case let .not(src, dest):
+            return "not\t\(src.toAsm()), \(dest.toAsm())"
+        case let .neg(src, dest):
+            return "neg\t\(src.toAsm()), \(dest.toAsm())"
+        case let .inc(imm, reg):
+            return "inc\t\(imm.toAsm()), \(reg.toAsm())"
+        case let .mov(op, reg):
+            return "mov\t\(op.toAsm()), \(reg.toAsm())"
+        }
+    }
 }
 
 enum PseudoOps : AsmObject {
@@ -549,4 +671,31 @@ enum PseudoOps : AsmObject {
     case skip(Int)
     case type(String)
     case word(Int)
+
+    func toAsm() -> String {
+        switch self {
+        case let .align(val):
+            return ".align\t\(val)"
+        case let .ascii(str):
+            return ".ascii\t\"\(str)\""
+        case let .file(str):
+            return ".file\t\"\(str)\""
+        case let .global(str):
+            return ".global\t\(str)"
+        case let .ident(str):
+            return ".ident\t\"\(str)\""
+        case let .proc(val):
+            return ".proc\t\(val)"
+        case let .section(str):
+            return ".section\t\(str)"
+        case let .size(val):
+            return ".size\t\(val)"
+        case let .skip(val):
+            return ".skip\t\(val)"
+        case let .type(str):
+            return ".type\t\(str)"
+        case let .word(val):
+            return ".word\t\(val)"
+        }
+    }
 }
