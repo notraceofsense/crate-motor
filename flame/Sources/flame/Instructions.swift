@@ -8,6 +8,20 @@ protocol AsmObject {
 
 protocol Operand : AsmObject {}
 
+enum Unary : AsmObject {
+    case hi(Operand)
+    case lo(Operand)
+
+    func toAsm() -> String {
+        switch self {
+            case let .hi(operand):
+                return "%hi(\(operand))"
+            case let .lo(operand):
+                return "%lo(\(operand))"
+        }
+    }
+}
+
 enum Reg : Operand {
     // general purpose
     case g0, g1, g2, g3, g4, g5, g6, g7
