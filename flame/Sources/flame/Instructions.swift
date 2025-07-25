@@ -36,28 +36,30 @@ struct Offset {
     }
 }
 
+protocol Label {}
+
 protocol Instr {
     func toAsm()
 }
 
-enum ArithInstr<T: Operand> : Instr {
-    case add(Reg, T, Reg)
-    case sub(Reg, T, Reg)
-    case and(Reg, T, Reg)
-    case andn(Reg, T, Reg)
-    case or(Reg, T, Reg)
-    case orn(Reg, T, Reg)
-    case xor(Reg, T, Reg)
-    case xnor(Reg, T, Reg)
+enum ArithInstr : Instr {
+    case add(Reg, Operand, Reg)
+    case sub(Reg, Operand, Reg)
+    case and(Reg, Operand, Reg)
+    case andn(Reg, Operand, Reg)
+    case or(Reg, Operand, Reg)
+    case orn(Reg, Operand, Reg)
+    case xor(Reg, Operand, Reg)
+    case xnor(Reg, Operand, Reg)
     // Condition code setting opcodes
-    case addcc(Reg, T, Reg)
-    case subcc(Reg, T, Reg)
-    case andcc(Reg, T, Reg)
-    case andncc(Reg, T, Reg)
-    case orcc(Reg, T, Reg)
-    case orncc(Reg, T, Reg)
-    case xorcc(Reg, T, Reg)
-    case xnorcc(Reg, T, Reg)
+    case addcc(Reg, Operand, Reg)
+    case subcc(Reg, Operand, Reg)
+    case andcc(Reg, Operand, Reg)
+    case andncc(Reg, Operand, Reg)
+    case orcc(Reg, Operand, Reg)
+    case orncc(Reg, Operand, Reg)
+    case xorcc(Reg, Operand, Reg)
+    case xnorcc(Reg, Operand, Reg)
 }
 
 enum LoadStoreInstr : Instr {
@@ -74,5 +76,27 @@ enum LoadStoreInstr : Instr {
 }
 
 enum BranchInstr : Instr {
-    
+    case ba(Label)
+    case bn(Label)
+    case bne(Label)
+    case bnz(Label)
+    case be(Label)
+    case bz(Label)
+    case bg(Label)
+    case ble(Label)
+    case bge(Label)
+    case bl(Label)
+    case bgu(Label)
+    case bleu(Label)
+    case bcc(Label)
+    case bcs(Label)
+    case bpos(Label)
+    case bneg(Label)
+    case bvc(Label)
+    case bvs(Label)
 }
+
+enum CallInstr : Instr {
+    case call(Label)
+}
+
