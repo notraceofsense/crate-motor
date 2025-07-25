@@ -481,7 +481,7 @@ enum JmplInstr : Instr {
 }
 
 enum MiscInstr : Instr {
-    case sethi(SethiConst, Reg)
+    case sethi(AsmObject, Reg)
 }
 
 enum SynthInstr : Instr {
