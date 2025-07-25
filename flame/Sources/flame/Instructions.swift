@@ -96,7 +96,26 @@ enum BranchInstr : Instr {
     case bvs(Label)
 }
 
-enum CallInstr : Instr {
-    case call(Label)
+enum RegWinInstr : Instr {
+    case restore(Reg, Operand, Reg)
+    case save(Reg, Operand, Reg)
 }
 
+enum JmplInstr : Instr {
+    case jmpl(Label, Reg)
+}
+
+enum SynthInstr : Instr {
+    case cmp(Reg, Operand)
+    case jmp(Label)
+    case call(Label)
+    case tst(Reg)
+    case ret
+    case retl
+    case restore
+    case save 
+    case set(Int, Reg)
+    case not(Reg, Reg)
+    case neg(Reg, Reg)
+}
+        
