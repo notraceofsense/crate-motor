@@ -2,6 +2,8 @@
 // We can do that later
 // https://moss.csc.ncsu.edu/~mueller/codeopt/codeopt00/notes/sparc.html
 
+import Foundation
+
 protocol AsmObject {
     func toAsm() -> String
 }
@@ -30,7 +32,7 @@ class NormConstant : Constant {
      var value: Int
 
      init(value: Int) throws {
-        if(value > upperBound || value < lowerBound) {
+        if(value > NormConstant.upperBound || value < NormConstant.lowerBound) {
             throw Constant.ConstError.outOfRange
         } else {
             self.value = value
@@ -51,7 +53,7 @@ class ArithConst : Operand, Constant {
      var value: Int
 
      init(value: Int) throws {
-        if(value > upperBound || value < lowerBound) {
+        if(value > ArithConst.upperBound || value < ArithConst.lowerBound) {
             throw Constant.ConstError.outOfRange
         } else {
             self.value = value
@@ -71,7 +73,7 @@ class SethiConst : Constant {
     var value: Int
 
     init(value: Int) throws {
-        if(value > upperBound || value < lowerBound) {
+        if(value > SethiConst.upperBound || value < SethiConst.lowerBound) {
             throw Constant.ConstError.outOfRange
         } else {
             self.value = value
@@ -353,7 +355,7 @@ struct Offset : AsmObject {
 }
 
 struct Label : Address {
-    var value : String { get }
+    var value : String
     init(value: String) {
         // TODO: Check validity of label
         self.value = value
@@ -372,7 +374,7 @@ struct BranchAddress : Address, Constant {
     var value: Int
 
     init(value: Int) throws {
-        if(value > upperBound || value < lowerBound) {
+        if(value > BranchAddress.upperBound || value < BranchAddress.lowerBound) {
             throw Constant.ConstError.outOfRange
         } else {
             self.value = value
@@ -392,7 +394,7 @@ struct JumpAddress : Address, Constant {
     var value: Int
 
     init(value: Int) throws {
-        if(value > upperBound || value < lowerBound) {
+        if(value > JumpAddress.upperBound || value < JumpAddress.lowerBound) {
             throw Constant.ConstError.outOfRange
         } else {
             self.value = value
