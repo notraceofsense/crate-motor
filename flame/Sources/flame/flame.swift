@@ -15,24 +15,17 @@ struct Label : Address {
     }
 }
 
-struct AddLit : Address {
-    var val : Int
-    func toAsm() -> String {
-        return val
-    }
-}
-
 protocol Reg_Or_Imm : AsmObject {}
 
-struct Imm : Reg_Or_Imm {
+struct Imm : Reg_Or_Imm, Address {
     var val : Int
 
     func toAsm() -> String {
-        return val
+        return String(val)
     }
 }
 
-struct LabelInstr : AsmObject {
+struct LabelInstr : Instr {
     var name : Label
     func toAsm() -> String {
         return "\(name.toAsm()):"
