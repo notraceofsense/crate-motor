@@ -1,3 +1,0 @@
-enum Token {
-    IntLit(Int)
-}

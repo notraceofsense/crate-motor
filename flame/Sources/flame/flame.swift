@@ -1,12 +1,12 @@
 
 
-protocol AsmObject {
+public protocol AsmObject {
     func toAsm() -> String
 }
 
-protocol Instr : AsmObject {}
+public protocol Instr : AsmObject {}
 
-protocol Address : AsmObject {}
+public protocol Address : AsmObject {}
 
 struct Label : Address {
     var name : String
@@ -15,7 +15,7 @@ struct Label : Address {
     }
 }
 
-protocol Reg_Or_Imm : AsmObject {}
+public protocol Reg_Or_Imm : AsmObject {}
 
 struct Imm : Reg_Or_Imm, Address {
     var val : Int
@@ -32,7 +32,7 @@ struct LabelInstr : Instr {
     }
 }
 
-enum Reg : Reg_Or_Imm {
+public enum Reg : Reg_Or_Imm {
     // general purpose
     case g0, g1, g2, g3, g4, g5, g6, g7
     case o0, o1, o2, o3, o4, o5, o6, o7
@@ -47,10 +47,10 @@ enum Reg : Reg_Or_Imm {
     // special regs
     case psr, tbr, wim, y
 
-    static let sp = Reg.o6
-    static let fp = Reg.i6
+    nonisolated(unsafe) static let sp = Reg.o6
+    nonisolated(unsafe) static let fp = Reg.i6
 
-    func toAsm() -> String {
+    public func toAsm() -> String {
         // This is horible but I can't think of a better way
         // TODO: Do this better
         switch self {
@@ -549,12 +549,18 @@ struct Fmov : Instr {
     }
 }
 
-struct Setx : Instr {
+public struct Setx : Instr {
     var val: Int
     var tmp: Reg
     var dest: Reg
-
-    func toAsm() -> String {
+    
+    public init(val: Int, tmp: Reg, dest: Reg) {
+        self.val = val
+        self.tmp = tmp
+        self.dest = dest
+    }
+    
+    public func toAsm() -> String {
         return "setx \(val), \(tmp.toAsm()), \(dest.toAsm())"
     }
 }
