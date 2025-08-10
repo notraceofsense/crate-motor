@@ -548,3 +548,13 @@ struct Fmov : Instr {
         return "fmov \(src.toAsm()), \(dest.toAsm())"
     }
 }
+
+struct Setx : Instr {
+    var val: Int
+    var tmp: Reg
+    var dest: Reg
+
+    func toAsm() -> String {
+        return "setx \(val), \(tmp.toAsm()), \(dest.toAsm())"
+    }
+}
