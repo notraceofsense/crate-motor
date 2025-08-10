@@ -564,3 +564,14 @@ public struct Setx : Instr {
         return "setx \(val), \(tmp.toAsm()), \(dest.toAsm())"
     }
 }
+
+
+public func toAsm(a: Array<Instr>) -> String {
+    var res = ""
+    
+    for inst in a {
+        res += inst.toAsm() + "\n"
+    }
+    
+    return res
+}
