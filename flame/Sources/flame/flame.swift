@@ -566,7 +566,7 @@ public struct Setx : Instr {
 }
 
 
-public func toAsm(a: Array<Instr>) -> String {
+public func toAsm(_ a: [Instr]) -> String {
     var res = ""
     
     for inst in a {

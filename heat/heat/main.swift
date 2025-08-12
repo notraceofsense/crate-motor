@@ -6,6 +6,13 @@
 //
 
 import Foundation
+import flame
 
-print("Hello, World!")
+var input: String = ""
+
+while let line = readLine() {
+    input += line
+}
+
+print(try flame.toAsm(compile_e(parse(tokenize(input)))))
 

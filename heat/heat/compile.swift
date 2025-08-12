@@ -7,7 +7,7 @@
 
 import flame
 
-func compile(e: Ast) -> Array<flame.Instr> {
+func compile_e(_ e: Ast) -> [flame.Instr] {
     switch e {
     case .IntLit(let i):
         return [Setx(val: i, tmp: Reg.o1, dest: Reg.o0)]
