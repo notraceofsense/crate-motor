@@ -8,26 +8,26 @@ public protocol Instr : AsmObject {}
 
 public protocol Address : AsmObject {}
 
-struct Label : Address {
+public struct Label : Address {
     var name : String
-    func toAsm() -> String {
+    public func toAsm() -> String {
         return name
     }
 }
 
 public protocol Reg_Or_Imm : AsmObject {}
 
-struct Imm : Reg_Or_Imm, Address {
+public struct Imm : Reg_Or_Imm, Address {
     var val : Int
 
-    func toAsm() -> String {
+    public func toAsm() -> String {
         return String(val)
     }
 }
 
-struct LabelInstr : Instr {
+public struct LabelInstr : Instr {
     var name : Label
-    func toAsm() -> String {
+    public func toAsm() -> String {
         return "\(name.toAsm()):"
     }
 }

@@ -7,6 +7,12 @@
 
 import flame
 
+func compile(_ e: Ast) -> [flame.Instr] {
+    return [
+        
+    ] + compile_e(e)
+}
+
 func compile_e(_ e: Ast) -> [flame.Instr] {
     switch e {
     case .IntLit(let i):

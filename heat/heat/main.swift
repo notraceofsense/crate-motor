@@ -14,5 +14,5 @@ while let line = readLine() {
     input += line
 }
 
-print(try flame.toAsm(compile_e(parse(tokenize(input)))))
+print(try flame.toAsm(compile(parse(tokenize(input)))))
 
