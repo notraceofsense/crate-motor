@@ -575,3 +575,19 @@ public func toAsm(_ a: [Instr]) -> String {
     
     return res
 }
+
+// TODO: Create actual individual pseudo structs for each pseudo instruction
+// I am simply lazy
+public struct PsuedInstr : Instr {
+    var k : String
+    var v : String
+    
+    public init(k: String, v: String) {
+        self.k = k
+        self.v = v
+    }
+    
+    public func toAsm() -> String {
+        return ".\(k)"
+    }
+}
