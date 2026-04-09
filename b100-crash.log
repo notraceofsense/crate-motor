@@ -1,0 +1,167 @@
+Speed Jumper is set to 0000.0000.0000.0000
+Software Power ON
+
+@(#)OBP 4.0.45 2001/02/08 14:33 Sun Blade 100
+CPU SPEED 0x0000.0000.1deb.e980
+Initializing Memory Controller
+MCR0 0000.0000.56a0.bd04
+MCR1 0000.0000.c080.4000
+MCR2 0000.0000.0777.0aee
+MCR3 0000.0000.0000.01ef
+
+Clearing E$ Tags  Done
+Clearing I/D TLBs Done
+Probing Memory Done
+Clearing Memory Done
+MEM BASE = 0000.0000.4000.0000
+MEM SIZE = 0000.0000.1000.0000
+MMUs ON
+Copy Done
+PC = 0000.01ff.f000.275c
+PC = 0000.0000.0000.27a0
+Decompressing into Memory Done
+Size = 0000.0000.0006.5860
+ttya initialized
+Reset Control: BXIR:0 BPOR:0 SXIR:0 SPOR:0 POR:1
+Probing upa at 1f,0 pci
+Probing upa at 0,0 SUNW,UltraSPARC-IIe (256 KB)
+Loading Support Packages: kbd-translator
+Loading onboard drivers: ebus flashprom eeprom idprom
+Probing Memory Bank #0 512 Megabytes
+Probing Memory Bank #1 512 Megabytes
+Probing Memory Bank #2 256 Megabytes
+Probing Memory Bank #3   0 Megabytes
+Probing /pci@1f,0 Device 7  isa dma floppy parallel power serial serial
+Probing /pci@1f,0 Device c  network firewire usb
+Probing /pci@1f,0 Device 3  pmu i2c temperature card-reader dimm dimm
+   dimm ppm beep fan-control
+Probing /pci@1f,0 Device 8  sound
+Probing /pci@1f,0 Device d  ide disk cdrom
+Probing /pci@1f,0 Device 5  pci
+Probing /pci@1f,0/pci@5 Device 0  pci108e,7063
+Probing /pci@1f,0/pci@5 Device 1  Nothing there
+Probing /pci@1f,0/pci@5 Device 2  Nothing there
+Probing /pci@1f,0 Device 13  SUNW,m64B
+Reset Control: BXIR:0 BPOR:0 SXIR:0 SPOR:0 POR:1
+Probing upa at 1f,0 pci
+Probing upa at 0,0 SUNW,UltraSPARC-IIe (256 KB)
+Loading Support Packages: kbd-translator
+Loading onboard drivers: ebus flashprom eeprom idprom
+Probing Memory Bank #0 512 Megabytes
+Probing Memory Bank #1 512 Megabytes
+Probing Memory Bank #2 256 Megabytes
+Probing Memory Bank #3   0 Megabytes
+Probing /pci@1f,0 Device 7  isa dma floppy parallel power serial serial
+Probing /pci@1f,0 Device c  network firewire usb
+Probing /pci@1f,0 Device 3  pmu i2c temperature card-reader dimm dimm
+   dimm ppm beep fan-control
+Probing /pci@1f,0 Device 8  sound
+Probing /pci@1f,0 Device d  ide disk cdrom
+Probing /pci@1f,0 Device 5  pci
+Probing /pci@1f,0/pci@5 Device 0  pci108e,7063
+Probing /pci@1f,0/pci@5 Device 1  Nothing there
+Probing /pci@1f,0/pci@5 Device 2  Nothing there
+Probing /pci@1f,0 Device 13  SUNW,m64B
+
+Sun Blade 100 (UltraSPARC-IIe), No Keyboard
+OpenBoot 4.0, 1280 MB memory installed, Serial #50882506.
+Ethernet address 0:3:ba:8:67:ca, Host ID: 830867ca.
+
+
+
+Rebooting with command: boot disk
+Boot device: /pci@1f,0/ide@d/disk@0,0  File and args:
+Loading ufs-file-system package 1.4 04 Aug 1995 13:02:54.
+FCode UFS Reader 1.13 05/06/08 08:30:31.
+Loading: /platform/SUNW,Sun-Blade-100/ufsboot
+Loading: /platform/sun4u/ufsboot
+SunOS Release 5.11 Version snv_59 64-bit
+Copyright 1983-2006 Sun Microsystems, Inc.  All rights reserved.
+Use is subject to license terms.
+os-io WARNING: Last shutdown is later than time on time-of-day chip; check date.
+SUNW,eri0 : 100 Mbps full duplex link up
+Hostname: blade-1
+checking ufs filesystems
+/dev/rdsk/c0t0d0s7: is logging.
+t_optmgmt: System error: Cannot assign requested address
+
+blade-1 console login: syslogd: line 45: WARNING: loghost could not be resolved
+Jan 17 13:59:51 blade-1 sendmail[432]: My unqualified host name (blade-1) unknown; sleeping for retry
+Jan 17 13:59:51 blade-1 sendmail[435]: My unqualified host name (blade-1) unknown; sleeping for retry
+
+
+*****************************************************************************
+*
+* Starting Desktop Login on display :0...
+*
+* Wait for the Desktop Login screen before logging in.
+*
+*****************************************************************************
+
+
+*****************************************************************************
+*
+* The X-server can not be started on display :0...
+*
+* See file /var/dt/Xerrors for details.
+*
+*****************************************************************************
+Jan 17 14:00:51 blade-1 sendmail[435]: unable to qualify my own domain name (blade-1) -- using short name
+Jan 17 14:00:51 blade-1 sendmail[432]: unable to qualify my own domain name (blade-1) -- using short name
+
+blade-1 console login:
+blade-1 console login: root
+Jan 17 14:02:22 blade-1 login: ROOT LOGIN /dev/console
+Last login: Thu Jan 17 14:33:48 on console
+Sun Microsystems Inc.   SunOS 5.11      snv_59  October 2007
+# bash
+bash-3.00# ufsdump 0f /mnt/omoikane/b100bk/root.ufs /
+  DUMP: Date of this level 0 dump: Thu Jan 17 14:05:50 2013
+  DUMP: Date of last level 0 dump: the epoch
+  DUMP: Dumping /dev/rdsk/c0t0d0s0 (blade-1:/) to /mnt/omoikane/b100bk/root.ufs.
+  DUMP: Mapping (Pass I) [regular files]
+  DUMP: Mapping (Pass II) [directories]
+  DUMP: Writing 32 Kilobyte records
+  DUMP: Estimated 12201330 blocks (5957.68MB).
+  DUMP: Dumping (Pass III) [directories]
+  DUMP: Dumping (Pass IV) [regular files]
+WARNING: [AFT1] Uncorrectable Memory Error on CPU0 at TL=0, errID 0x00000096.248959c7
+    AFSR 0x00000001<ME>.80300000<PRIV,UE,CE> AFAR 0x00000000.1fc08050
+    AFSR.PSYND 0x0000(Score 05) AFSR.ETS 0x00 Fault_PC 0x1234028
+    UDBH 0x034f<UE,CE> UDBH.ESYND 0x4f UDBL 0x0000 UDBL.ESYND 0x00
+    UDBH Syndrome 0x4f Memory Module DIMM1
+
+panic[cpu0]/thread=300016b06a0: [AFT1] errID 0x00000096.248959c7 UE Error(s)
+    See previous message(s) for details
+
+000002a1007ad020 SUNW,UltraSPARC-IIe:cpu_aflt_log+5b4 (3, 2a1007ad268, 2a1007ad340, 10, 2a1007ad267, 2a1007ad268)
+  %l0-3: 000002a1007ad12b 00000000000f0000 0000000001237400 0000000001237800
+  %l4-7: 000002a1007ad268 0000000000000170 00000000018ae000 0000000000000001
+000002a1007ad270 SUNW,UltraSPARC-IIe:cpu_async_error+cdc (7fe00000, 0, 180300000, 40, 0, 1fc08050)
+  %l0-3: 0000000000000000 000000000180c000 0000000000000000 000002a1007ad434
+  %l4-7: 0000000001236c00 000000007e600000 0000000001236c00 0000000000000001
+000002a1007ad470 unix:ktl0+48 (feec2000, fffffa001fc0a000, 3ef, ffffffffffffe080, f406e02080a6bfff, 1)
+  %l0-3: 0000000000000001 0000000000001400 0000000004001600 000000000122b03c
+  %l4-7: 000000000000fe00 0000000000000000 0000000000000000 000002a1007ad520
+000002a1007ad5c0 genunix:uiomove+124 (fffffa001fc08000, 2000, 1, 2a1007ada98, 8000, 2000)
+  %l0-3: 000002a1007adaa8 000002a1007adad0 0000000001863000 0000000000000000
+  %l4-7: 0000000000010000 0000000000000003 0000000000000002 0000000000000000
+000002a1007ad670 nfs:writerp+218 (60001b827a0, fffffa001fc08000, 2000, 1, 1, 1087ec8)
+  %l0-3: 000000000000fff7 ffffffffffffe000 0000060001b82810 000002a1007adaa8
+  %l4-7: 0000000001858c18 0000000000002000 000000001fd40000 0000000000002000
+000002a1007ad770 nfs:nfs3_write+4a8 (6, 2a1007ada98, 2000, 2a1007adaa8, 60001b78dc0, 1fd40000)
+  %l0-3: 0000000000002000 00000600017d1d00 0000060001b827a0 fffffa001fc08000
+  %l4-7: 0000060001b82810 0000000000000000 0000000000000001 0000000000000000
+000002a1007ad930 genunix:fop_write+20 (60001b78dc0, 2a1007ada98, 0, 600018f92a0, 0, 7bb519f4)
+  %l0-3: 0000000000008000 0000060001a60040 0000000000002400 0000000000002000
+  %l4-7: 0000000000000001 00000600015feb00 0000060001a60040 0000000000003fb3
+000002a1007ad9e0 genunix:write+178 (4, 2002, 8000, 2002, 60001b78dc0, 0)
+  %l0-3: 0000000080000000 0000060001938ea8 0000000000008000 000000000000df3b
+  %l4-7: 000000001fd48000 7fffffffffffffff 8000000000000000 0000000080000000
+
+syncing file systems...
+panic[cpu0]/thread=300016b06a0: panic sync timeout
+dumping to /dev/dsk/c0t0d0s1, offset 108199936, content: kernel
+100% done: 13369 pages dumped, compression ratio 4.14, dump succeeded
+rebooting...
+Resetting ...
